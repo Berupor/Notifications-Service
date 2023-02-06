@@ -1,8 +1,8 @@
-from base import BasePydanticModel
-from user import UserModel
-from pydantic import Field
 from typing import Dict
 
+from models.base import BasePydanticModel
+from pydantic import Field
+from models.user import UserModel
 
 class ResponseEventModel(BasePydanticModel):
     user: UserModel

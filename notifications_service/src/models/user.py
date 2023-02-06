@@ -1,4 +1,4 @@
-from base import BasePydanticModel
+from models.base import BasePydanticModel
 
 
 class UserModel(BasePydanticModel):
