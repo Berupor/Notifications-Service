@@ -1,6 +1,6 @@
-from models.base import BasePydanticModel
+from pydantic import BaseModel
 
 
-class UserModel(BasePydanticModel):
-    username: str
+class UserModel(BaseModel):
+    name: str
     email: str
