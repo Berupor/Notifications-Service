@@ -240,3 +240,4 @@ dmypy.json
 cython_debug/
 
 !/.env.dev
+!/.env.dev
