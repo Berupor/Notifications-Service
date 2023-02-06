@@ -2,12 +2,14 @@ version: '3'
 services:
   db:
     image: postgres:13
+    env_file:
+      - .env
     restart: always
     container_name: postgres
     environment:
-      POSTGRES_PASSWORD: qwe
-      POSTGRES_USER: app
-      POSTGRES_DB: notifications
+      - POSTGRES_USER=${POSTGRES__USER}
+      - POSTGRES_PASSWORD=${POSTGRES__PASSWORD}
+      - POSTGRES_DB=${POSTGRES__DBNAME}
     depends_on:
       - service
     ports:
