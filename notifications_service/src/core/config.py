@@ -15,9 +15,27 @@ class FastapiSettings(BaseSettings):
     port: int
 
 
+class RabbitMQSettings(BaseSettings):
+    host: str
+    port: int
+    username: str
+    password: str
+
+
+class PostgresSettings(BaseSettings):
+    user: str
+    dbname: str
+    password: str
+    host: str
+    port: int
+
+
 class Settings(BaseSettings):
     token_algo: str
+
+    rabbitmq: RabbitMQSettings
     fastapi: FastapiSettings
+    postgres: PostgresSettings
 
     class Config:
         #  For local development outside of docker
