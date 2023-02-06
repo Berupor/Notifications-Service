@@ -9,8 +9,8 @@ from message_broker.rabbitmq.rabbitmq_broker import get_rabbitmq
 app = FastAPI(
     title="API для получения и обработки нотификаций пользователя",
     version="1.0.0",
-    docs_url="/ugc/api/openapi",
-    openapi_url="/ugc/api/openapi.json",
+    docs_url="/api/openapi",
+    openapi_url="/api/openapi.json",
     default_response_class=ORJSONResponse,
 )
 

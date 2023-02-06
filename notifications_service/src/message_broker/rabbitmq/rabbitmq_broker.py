@@ -1,4 +1,3 @@
-import asyncio
 
 import aiormq
 
@@ -25,6 +24,8 @@ class RabbitMQBroker:
             await self.connection.close()
 
     async def produce(self, message: str, queue_name: str):
+        await self.channel.queue_declare(queue_name, auto_delete=True)
+
         await self.channel.basic_publish(message.encode(), routing_key=queue_name)
 
 
