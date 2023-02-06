@@ -8,3 +8,17 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
+
+  db:
+    image: postgres:14.5-alpine
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES__USER}
+      - POSTGRES_PASSWORD=${POSTGRES__PASSWORD}
+      - POSTGRES_DB=${POSTGRES__DBNAME}
+    ports:
+      - "5432:5432"
