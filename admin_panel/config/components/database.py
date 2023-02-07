@@ -2,7 +2,7 @@ from config.project_config import settings
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": settings.postgres.dbname,
         "USER": settings.postgres.user,
         "PASSWORD": settings.postgres.password,
