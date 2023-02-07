@@ -1,16 +1,32 @@
 version: '3'
 services:
-  db:
-    image: postgres:13
+  rabbitmq:
     env_file:
       - .env
-    restart: always
+    container_name: rabbitmq
+    hostname: ${RABBITMQ__HOST}
+    image: rabbitmq:3.11-management
+    restart:
+      always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ__USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ__PASSWORD}
+
+  postgres:
     container_name: postgres
+    hostname: postgres
+    image: postgres:15-alpine
+    #    volumes:
+    #      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${POSTGRES__USER}
       - POSTGRES_PASSWORD=${POSTGRES__PASSWORD}
       - POSTGRES_DB=${POSTGRES__DBNAME}
-    depends_on:
-      - service
     ports:
-      - 5432:5432
+      - "5432:5432"
