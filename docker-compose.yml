@@ -12,7 +12,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ__USER}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ__USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ__PASSWORD}
 
   postgres:
@@ -30,3 +30,13 @@ services:
       - POSTGRES_DB=${POSTGRES__DBNAME}
     ports:
       - "5432:5432"
+      -
+  admin-panel:
+    container_name: admin-panel
+    build: admin_panel
+    restart:
+      always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
