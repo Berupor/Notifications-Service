@@ -1,5 +1,6 @@
-from .models import User, Template
 from django.contrib import admin
+
+from .models import Template, User
 
 
 @admin.register(User)
