@@ -21,6 +21,7 @@ class UUIDMixin(models.Model):
 class User(UUIDMixin):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
+    premium = models.BooleanField(default=False)
 
     class Meta:
         db_table = "user"
@@ -29,43 +30,38 @@ class User(UUIDMixin):
         return self.name
 
 
-class Template(UUIDMixin):
-    id = models.AutoField(primary_key=True)
-    html = models.TextField(null=False)
-    event_name = models.CharField(max_length=255, unique=True, null=False)
+class Notification(TimeStampedMixin):
+    name = models.CharField(max_length=255)
+    schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE)
+    priority = models.PositiveSmallIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        indexes = [models.Index(fields=["event_name"])]
+        db_table = "notification"
+
+    def __str__(self):
+        return self.name
+
+
+class Template(UUIDMixin):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    html = models.TextField(null=False)
+    notification_name = models.ForeignKey(Notification, on_delete=models.CASCADE)
+
+    class Meta:
         db_table = "template"
 
     def __str__(self):
-        return self.event_name
+        return self.name
 
 
-class Schedule(UUIDMixin):
+class Schedule(UUIDMixin, TimeStampedMixin):
     crontab = models.CharField(max_length=50, null=False)
-    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
 
     class Meta:
         db_table = "schedule"
 
-
-class Event(TimeStampedMixin):
-    """
-    Модель не окончательная и требует доработки.
-    """
-
-    id_schedule = models.ForeignKey(
-        Schedule, on_delete=models.CASCADE, null=True, related_name="events"
-    )
-    id_user = models.UUIDField(null=False)
-    email = models.EmailField(max_length=255, null=True)
-    message = models.TextField(null=True)
-    event = models.CharField(max_length=255, null=False)
-    priority = models.IntegerField(null=True)
-
-    class Meta:
-        db_table = "event"
-
     def __str__(self):
-        return self.event
+        return self.name
