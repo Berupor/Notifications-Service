@@ -40,8 +40,8 @@ class NotificationAdmin(admin.ModelAdmin):
 
 @admin.register(Template)
 class TemplateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'notification')
-    search_fields = ('name', 'notification__name')
+    list_display = ('name',)
+    search_fields = ('name',)
     ordering = ('name',)
 
 

@@ -1,5 +1,5 @@
 from core.config import settings
-from db.models.user import User
+from db.models.models import User
 from services.base_postgres_service import BaseService
 
 

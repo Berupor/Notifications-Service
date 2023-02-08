@@ -47,6 +47,7 @@ class Notification(TimeStampedMixin):
     name = models.CharField(max_length=255)
     schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE)
     priority = models.PositiveSmallIntegerField()
+    template = models.ForeignKey("Template", on_delete=models.CASCADE)
     data = models.JSONField()
 
     class Meta:
@@ -60,7 +61,6 @@ class Template(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     html = models.TextField(null=False)
-    notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "template"
@@ -97,3 +97,21 @@ class UserNotification(models.Model):
     class Meta:
         db_table = "user_notification"
         unique_together = ('user', 'notification')
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.notification.schedule.name == "Now":
+            payload = {
+                'notification_name': self.notification.name,
+                'priority': self.notification.priority,
+                'data': self.notification.data
+            }
+
+            url = f"http://localhost:8001/api/v1/notification/email/{self.user.id}"
+            response = requests.post(url, json=payload)
+
+            # Todo: Добавить логи
+            if response.status_code == 200:
+                print('Notification sent successfully')
+            else:
+                print('Failed to send notification')
