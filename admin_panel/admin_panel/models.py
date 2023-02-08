@@ -1,5 +1,4 @@
 import uuid
-
 from django.db import models
 
 
@@ -21,7 +20,7 @@ class UUIDMixin(models.Model):
 class User(UUIDMixin):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    premium = models.BooleanField(default=False)
+    characteristic = models.ManyToManyField("Characteristic", through="UserCharacteristic")
 
     class Meta:
         db_table = "user"
@@ -30,11 +29,32 @@ class User(UUIDMixin):
         return self.name
 
 
+class Characteristic(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = "characteristic"
+
+    def __str__(self):
+        return self.name
+
+
+class UserCharacteristic(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    characteristic = models.ForeignKey(Characteristic, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "user_characteristic"
+        unique_together = ('user', 'characteristic')
+
+
 class Notification(TimeStampedMixin):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE)
     priority = models.PositiveSmallIntegerField()
-    created = models.DateTimeField(auto_now_add=True)
+    data = models.JSONField()
 
     class Meta:
         db_table = "notification"
@@ -43,11 +63,11 @@ class Notification(TimeStampedMixin):
         return self.name
 
 
-class Template(UUIDMixin):
+class Template(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     html = models.TextField(null=False)
-    notification_name = models.ForeignKey(Notification, on_delete=models.CASCADE)
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "template"
@@ -56,7 +76,8 @@ class Template(UUIDMixin):
         return self.name
 
 
-class Schedule(UUIDMixin, TimeStampedMixin):
+class Schedule(TimeStampedMixin):
+    id = models.AutoField(primary_key=True)
     crontab = models.CharField(max_length=50, null=False)
     name = models.CharField(max_length=255)
 
