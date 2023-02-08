@@ -1,5 +1,18 @@
 version: '3'
 services:
+  notifications_generator:
+    build:
+      context: ./notifications_generator
+      dockerfile: DockerFile
+    image: notifications_generator:latest
+    container_name: notifications_generator
+    depends_on:
+      - postgres
+    expose:
+      - "8000"
+    env_file:
+      - ./.env
+
   rabbitmq:
     env_file:
       - .env
@@ -12,10 +25,10 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ__USER}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ__USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ__PASSWORD}
 
-  postgres:
+  db:
     container_name: postgres
     hostname: postgres
     image: postgres:15-alpine

@@ -1,16 +1,17 @@
-# asyncpg
-# sqlalchemy[asyncio]==1.4.46
-# aiormq==6.6.4
-# mypy==0.991
-# pytest==7.2.1
-# fastapi==0.88.0
-# mypy-extensions==0.4.3
-# pydantic==1.10.4
-# python-dotenv==0.21.0
-# typing_extensions==4.4.0
-# uvicorn==0.20.0
-# watchfiles==0.18.1
-# orjson==3.8.5
-# python-telegram-bot==20.0
-# flake8-html==0.4.3
-# backoff==2.2.1
+asyncpg
+sqlalchemy[asyncio]==1.4.46
+aiormq==6.6.4
+mypy==0.991
+pytest==7.2.1
+fastapi==0.88.0
+mypy-extensions==0.4.3
+pydantic==1.10.4
+python-dotenv==0.21.0
+typing_extensions==4.4.0
+uvicorn==0.20.0
+watchfiles==0.18.1
+orjson==3.8.5
+python-telegram-bot==20.0
+flake8-html==0.4.3
+backoff==2.2.1
+asyncio==3.4.3
