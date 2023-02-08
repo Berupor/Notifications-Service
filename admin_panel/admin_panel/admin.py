@@ -1,16 +1,23 @@
 from django.contrib import admin
-from .models import User, Characteristic, UserCharacteristic, Notification, Template, Schedule
+from .models import User, Characteristic, UserCharacteristic, Notification, Template, Schedule, UserNotification
 
 
 class UserCharacteristicInline(admin.TabularInline):
     model = UserCharacteristic
-    autocomplete_fields = ("user",)
+    extra = 1
+    autocomplete_fields = ("characteristic",)
+
+
+class UserNotificationInline(admin.TabularInline):
+    model = UserNotification
+    extra = 1
+    autocomplete_fields = ("notification",)
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    inlines = (UserCharacteristicInline,)
-    list_display = ('id', 'name', 'email')
+    inlines = (UserCharacteristicInline, UserNotificationInline)
+    list_display = ('name', 'email', "id")
     search_fields = ('name', 'email')
     ordering = ('name',)
     list_filter = ('characteristic__name',)
@@ -18,13 +25,14 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Characteristic)
 class CharacteristicAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
+    search_fields = ("characteristic", )
+    list_display = ('name', )
     ordering = ('name',)
 
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'schedule', 'priority',)
+    list_display = ('name', 'schedule', 'priority',)
     search_fields = ('name', 'schedule__name')
     ordering = ('priority',)
     list_filter = ("schedule", "priority")
@@ -32,7 +40,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
 @admin.register(Template)
 class TemplateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'notification')
+    list_display = ('name', 'notification')
     search_fields = ('name', 'notification__name')
     ordering = ('name',)
 

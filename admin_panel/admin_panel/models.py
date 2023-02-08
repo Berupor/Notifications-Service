@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+import requests
 
 
 class TimeStampedMixin(models.Model):
@@ -21,6 +22,7 @@ class User(UUIDMixin):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     characteristic = models.ManyToManyField("Characteristic", through="UserCharacteristic")
+    notification = models.ManyToManyField("Notification", through="UserNotification")
 
     class Meta:
         db_table = "user"
@@ -38,15 +40,6 @@ class Characteristic(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class UserCharacteristic(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    characteristic = models.ForeignKey(Characteristic, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = "user_characteristic"
-        unique_together = ('user', 'characteristic')
 
 
 class Notification(TimeStampedMixin):
@@ -86,3 +79,21 @@ class Schedule(TimeStampedMixin):
 
     def __str__(self):
         return self.name
+
+
+class UserCharacteristic(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    characteristic = models.ForeignKey(Characteristic, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "user_characteristic"
+        unique_together = ('user', 'characteristic')
+
+
+class UserNotification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "user_notification"
+        unique_together = ('user', 'notification')
