@@ -3,16 +3,16 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
-class Event(BaseModel):
+class Notification(BaseModel):
     id_user: str
-    name: str
+    created_at: str
+    notification_name: str
     priority: int = Field(default=0, ge=0, le=3)
     data: dict
-    created_at: str
 
 
-class EventRequest(BaseModel):
+class NotificationRequest(BaseModel):
     created_at: str
-    name: str
+    notification_name: str
     priority: int = Field(default=0, ge=0, le=3)
     data: dict
