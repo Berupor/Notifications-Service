@@ -28,7 +28,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ__USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ__PASSWORD}
 
-  db:
+  postgres:
     container_name: postgres
     hostname: postgres
     image: postgres:15-alpine
@@ -56,7 +56,11 @@ services:
 
 
   notifications_service:
-    build: notifications_service
+    build:
+      context: ./notifications_service
+      dockerfile: DockerFile
+    image: notifications_service:latest
+#    build: notifications_service
     container_name: notifications_service
     env_file:
       - .env

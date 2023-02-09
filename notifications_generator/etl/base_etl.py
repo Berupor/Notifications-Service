@@ -1,3 +1,4 @@
+import backoff
 import psycopg2
 from core.config import settings
 from etl.extract import Extract
@@ -6,6 +7,12 @@ from etl.transform import Transform
 
 
 class Etl:
+    @backoff.on_exception(
+        backoff.expo,
+        (psycopg2.OperationalError,),
+        max_time=1000,
+        max_tries=10,
+    )
     async def __aenter__(self):
         self.pg_conn = psycopg2.connect(
             host=settings.postgres.host,
@@ -16,7 +23,9 @@ class Etl:
         )
         self.extract = Extract(self.pg_conn)
         self.transform = Transform()
-        self.load = Load(base_url=f"http://localhost:8000")
+        self.load = Load(
+            base_url=f"http://{settings.fastapi.host}:{settings.fastapi.port}"
+        )
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

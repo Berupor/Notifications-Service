@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
 
 import croniter
-from models.event import Event
+from models.notifications import Notification
 from models.schedule import Schedule
 
 
@@ -15,9 +15,11 @@ class Transform:
             for row in data
         ]
 
-    async def validate_events(self, data: List[Tuple]) -> List[Event]:
+    async def validate_notifications(self, data: List[Tuple]) -> List[Notification]:
         return [
-            Event(**{key: row[i] for i, key in enumerate(Event.__fields__.keys())})
+            Notification(
+                **{key: row[i] for i, key in enumerate(Notification.__fields__.keys())}
+            )
             for row in data
         ]
 

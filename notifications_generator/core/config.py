@@ -9,6 +9,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_DIR = os.path.join(BASE_DIR, "..")
 
 
+class FastapiSettings(BaseSettings):
+    project_name: str
+    secret_key: str
+    host: str
+    port: int
+
+
 class PostgresSettings(BaseSettings):
     user: str
     dbname: str
@@ -18,6 +25,7 @@ class PostgresSettings(BaseSettings):
 
 
 class Settings(BaseSettings):
+    fastapi: FastapiSettings
     postgres: PostgresSettings
 
     class Config:
