@@ -43,3 +43,26 @@ services:
       - POSTGRES_DB=${POSTGRES__DBNAME}
     ports:
       - "5432:5432"
+
+  admin-panel:
+    container_name: admin-panel
+    build: admin_panel
+    restart:
+      always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+
+
+  notifications_service:
+    build: notifications_service
+    container_name: notifications_service
+    env_file:
+      - .env
+    hostname: ${FASTAPI__HOST}
+    restart: always
+    ports:
+      - "8001:8001"
+    depends_on:
+      - rabbitmq
