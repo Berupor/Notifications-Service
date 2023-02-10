@@ -32,8 +32,8 @@ services:
     container_name: postgres
     hostname: postgres
     image: postgres:15-alpine
-    #    volumes:
-    #      - postgres_data:/var/lib/postgresql/data/
+#    volumes:
+#      - ./postgres_data:/var/lib/postgresql/data/
     restart: always
     env_file:
       - .env
@@ -53,7 +53,6 @@ services:
       - "8000:8000"
     env_file:
       - .env
-
 
   notifications_service:
     build:
