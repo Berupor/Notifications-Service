@@ -1,19 +1,14 @@
 import aiormq
+from json import loads
 from core.config import settings
 
 
-async def on_message(message: aiormq.abc.DeliveredMessage):
-    print(f" [x] Received message {message!r}")
-    print(f"     Message body is: {message.body!r}")
-    return message
-
-
 class RabbitMq:
-    def __init__(self):
-        self.host = settings.rabbitmq.host
-        self.port = settings.rabbitmq.port
-        self.username = settings.rabbitmq.username
-        self.password = settings.rabbitmq.password
+    def __init__(self, host: str, port: int, username: str, password: str):
+        self.host = host
+        self.port = port
+        self.username = username
+        self.password = password
         self.connection = None
         self.channel = None
         self.message = None
@@ -29,7 +24,7 @@ class RabbitMq:
             await self.connection.close()
 
     async def save_message(self, message: aiormq.abc.DeliveredMessage):
-        self.message = message
+        self.message = loads(message.body.decode("utf-8"))
         return self
 
     async def consumer(self, queue: str):

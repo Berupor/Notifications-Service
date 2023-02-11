@@ -30,12 +30,26 @@ class PostgresSettings(BaseSettings):
     port: int
 
 
+class EmailServer(BaseSettings):
+    host: str
+    port: int
+
+
+class ClickhouseSettings(BaseSettings):
+    host: str
+    port: int
+    user: str
+    password: str
+
+
 class Settings(BaseSettings):
     token_algo: str
 
     rabbitmq: RabbitMQSettings
     fastapi: FastapiSettings
     postgres: PostgresSettings
+    email_server: EmailServer
+    clickhouse: ClickhouseSettings
 
     class Config:
         #  For local development outside of docker

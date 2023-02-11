@@ -32,8 +32,8 @@ services:
     container_name: postgres
     hostname: postgres
     image: postgres:15-alpine
-#    volumes:
-#      - ./postgres_data:/var/lib/postgresql/data/
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
     restart: always
     env_file:
       - .env
@@ -69,3 +69,25 @@ services:
       - "8001:8001"
     depends_on:
       - rabbitmq
+
+  email_server:
+    build:
+      context: ./email_server
+      dockerfile: DockerFile
+    image: email_server:latest
+    container_name: email_server
+    expose:
+      - "25"
+    ports:
+      - "25:25"
+
+  clickhouse:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse
+    hostname: clickhouse
+    expose:
+      - "8123"
+      - "9000"
+    ports:
+      - "8123:8123"
+      - "9000:9000"
