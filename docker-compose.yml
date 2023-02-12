@@ -8,8 +8,7 @@ services:
     container_name: notifications_generator
     depends_on:
       - postgres
-    expose:
-      - "8000"
+      - notifications_service
     env_file:
       - ./.env
 
@@ -21,9 +20,12 @@ services:
     image: rabbitmq:3.11-management
     restart:
       always
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+    expose:
+      - "5672"
+      - "15672"
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ__USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ__PASSWORD}
@@ -32,8 +34,6 @@ services:
     container_name: postgres
     hostname: postgres
     image: postgres:15-alpine
-    #    volumes:
-    #      - postgres_data:/var/lib/postgresql/data/
     restart: always
     env_file:
       - .env
@@ -41,8 +41,10 @@ services:
       - POSTGRES_USER=${POSTGRES__USER}
       - POSTGRES_PASSWORD=${POSTGRES__PASSWORD}
       - POSTGRES_DB=${POSTGRES__DBNAME}
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
+#    ports:
+#      - "5432:5432"
 
   admin-panel:
     container_name: admin-panel
@@ -54,19 +56,51 @@ services:
     env_file:
       - .env
 
-
   notifications_service:
     build:
       context: ./notifications_service
       dockerfile: DockerFile
     image: notifications_service:latest
-#    build: notifications_service
     container_name: notifications_service
     env_file:
       - .env
     hostname: ${FASTAPI__HOST}
     restart: always
-    ports:
-      - "8001:8001"
+    expose:
+      - "8001"
+#    ports:
+#      - "8001:8001"
     depends_on:
       - rabbitmq
+
+  email_server:
+    build:
+      context: ./email_server
+      dockerfile: DockerFile
+    image: email_server:latest
+    container_name: email_server
+    expose:
+      - "25"
+
+  clickhouse:
+    image: yandex/clickhouse-server:21.7.4
+    container_name: clickhouse
+    hostname: clickhouse
+    expose:
+      - "8123"
+      - "9000"
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: DockerFile
+    image: worker:latest
+    container_name: worker
+    depends_on:
+      - rabbitmq
+      - clickhouse
+    env_file:
+      - ./.env
