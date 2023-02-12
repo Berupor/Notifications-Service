@@ -1,5 +1,6 @@
 from json import dumps
 from typing import Dict
+import backoff
 
 import asynch
 
@@ -15,6 +16,14 @@ class Clickhouse:
         self.cursor = None
         self.table = "notification"
 
+    @backoff.on_exception(
+        backoff.expo,
+        (
+                ConnectionError
+         ),
+        max_time=1000,
+        max_tries=10,
+    )
     async def connect(self):
         self.connection = await asynch.connect(
             host=self.host, port=self.port, user=self.user, password=self.password

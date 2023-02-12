@@ -1,7 +1,7 @@
 from json import loads
+import backoff
 
 import aiormq
-from core.config import settings
 
 
 class RabbitMq:
@@ -14,6 +14,14 @@ class RabbitMq:
         self.channel = None
         self.message = None
 
+    @backoff.on_exception(
+        backoff.expo,
+        (
+                ConnectionError
+         ),
+        max_time=1000,
+        max_tries=10,
+    )
     async def connect(self):
         self.connection = await aiormq.connect(
             f"amqp://{self.username}:{self.password}@{self.host}//"
