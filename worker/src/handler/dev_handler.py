@@ -3,11 +3,11 @@ import logging
 import random
 from time import sleep
 import requests
+from datetime import datetime
 
 from clickhouse_driver import Client
 
-from worker.src.models.message import NotificationHandler
-from worker.src.models.message import MessageHandler
+from states import BaseStorage, JsonFileStorage, State
 
 logging.basicConfig(level=logging.INFO)
 
@@ -15,8 +15,8 @@ client = Client(host="localhost")
 service_url = "http://0.0.0.0:8001/api/v1/notification/email"
 
 
-def data_from_ch():
-    result = client.execute(f"""SELECT * FROM default.notification WHERE status LIKE '%error%'""",
+def data_from_ch(updated):
+    result = client.execute(f"""SELECT * FROM default.notification WHERE status LIKE '%error%' AND created > {updated} """,
                                   with_column_types=True)
     return result
 
@@ -31,8 +31,8 @@ def data_transform(result):
     return messages
 
 
-def message_producer():
-    result = data_from_ch()
+def message_producer(updated):
+    result = data_from_ch(updated=updated)
     messages = data_transform(result)
     return messages
 
@@ -50,8 +50,10 @@ if __name__ == "__main__":
     while True:
         state_storage = JsonFileStorage(file_path='json_state')
         state = State(storage=state_storage)
-    messages = message_producer()
-    for message in messages:
-        message_sender(message)
-    logging.info(" [*] Waiting for messages. To exit press CTRL+C")
-    sleep(1)
+        updated = state.get_state(key='updated')
+        messages = message_producer(updated=updated)
+        for message in messages:
+            message_sender(message)
+        state.set_state(key='updated', value=str(datetime.now()))
+        logging.info(" [*] Waiting for messages. To exit press CTRL+C")
+        sleep(3)
