@@ -15,24 +15,28 @@ async def main():
 
             if await processing.read_queue(queues=["high", "medium", "low"]):
                 async with Recipier(type=processing.broker.message["type"]) as recipier:
-                    await recipier.service.create_message(user_from='from@example.com',
-                                                          users_to=['to@email.com'],
-                                                          subject='Добро пожаловать в Practix!',
-                                                          content='В этой фразе 25 символов.')
-                    response = await recipier.service.send_message()
-                    await processing.check_status(response=response)
+                    async for message in recipier.service.create_message(
+                        users_to=[processing.broker.message["user"]["email"]],
+                        data=processing.broker.message["data"],
+                        template=processing.broker.message["template"],
+                    ):
+                        response = await recipier.service.send_message(message)
+                        await processing.check_status(response=response)
 
-                    result_insert = await processing.storage.insert(
-                        table='notification',
-                        data=[await processing.storage.validate_format(
-                            status=processing.status,
-                            message=processing.broker.message
-                        )]
-                    )
-                    if result_insert:
-                        logging.info("data insert successfully")
-                    else:
-                        logging.info("data insert with ERROR")
+                        result_insert = await processing.storage.insert(
+                            table=processing.storage.table,
+                            data=[
+                                await processing.storage.validate_format(
+                                    status=processing.status,
+                                    message=processing.broker.message,
+                                )
+                            ],
+                        )
+
+                        if result_insert:
+                            logging.info("data insert successfully")
+                        else:
+                            logging.info("data insert with ERROR")
 
             logging.info("sleep on 10 sec")
             sleep(10)

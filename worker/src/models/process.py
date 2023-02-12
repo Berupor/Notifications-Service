@@ -1,6 +1,6 @@
 from broker.broker import RabbitMq
-from db.clickhouse import Clickhouse
 from core.config import settings
+from db.clickhouse import Clickhouse
 
 
 class Process:
@@ -9,13 +9,13 @@ class Process:
             host=settings.rabbitmq.host,
             port=settings.rabbitmq.port,
             username=settings.rabbitmq.username,
-            password=settings.rabbitmq.password
+            password=settings.rabbitmq.password,
         )
         self.storage = Clickhouse(
             host=settings.clickhouse.host,
             port=settings.clickhouse.port,
             user=settings.clickhouse.user,
-            password=settings.clickhouse.password
+            password=settings.clickhouse.password,
         )
         await self.broker.connect()
         await self.storage.connect()

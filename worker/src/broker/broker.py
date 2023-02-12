@@ -1,5 +1,6 @@
-import aiormq
 from json import loads
+
+import aiormq
 from core.config import settings
 
 
