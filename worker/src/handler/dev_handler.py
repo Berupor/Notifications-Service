@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import random
 from time import sleep
 import requests
 
@@ -11,8 +12,7 @@ from worker.src.models.message import MessageHandler
 logging.basicConfig(level=logging.INFO)
 
 client = Client(host="localhost")
-notification_table = "notifications"
-service_url = ""
+service_url = "http://0.0.0.0:8001/api/v1/notification/email"
 
 
 def data_from_ch():
@@ -38,13 +38,20 @@ def message_producer():
 
 
 def message_sender(message):
-    r = requests.post(f"{service_url}", data=message)
-    status_code = r.status_code
+    #user_id = message.user_id
+    user_id = random.randint
+    result = requests.post(f"{service_url}/{user_id}", data=message)
+    status_code = result.status_code
     logging.info(status_code)
     return status_code
 
 
 if __name__ == "__main__":
-    print(message_producer())
+    while True:
+        state_storage = JsonFileStorage(file_path='json_state')
+        state = State(storage=state_storage)
+    messages = message_producer()
+    for message in messages:
+        message_sender(message)
     logging.info(" [*] Waiting for messages. To exit press CTRL+C")
     sleep(1)
