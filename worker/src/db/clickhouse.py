@@ -36,5 +36,8 @@ class Clickhouse:
     async def insert(self, table: str, data: list):
         return await self.cursor.execute(f"INSERT INTO {table}(status, message) VALUES", data)
 
+    async def failed_messages(self, table: str):
+        return await self.cursor.execute(f"SELECT * FROM {table} WHERE status = error")
+
     async def validate_format(self, status: str, message: dict) -> Dict:
         return {"status": status, "message": dumps(message)}
