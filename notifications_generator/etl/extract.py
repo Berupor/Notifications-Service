@@ -1,4 +1,5 @@
 import backoff
+from typing import AsyncGenerator
 
 
 class Extract:
@@ -15,7 +16,7 @@ class Extract:
         curs.execute(query)
         return curs
 
-    async def read_db(self, query: str, batch_size: int = 100) -> list:
+    async def read_db(self, query: str, batch_size: int = 100) -> AsyncGenerator:
         """Функция выполнения запросов к хранилищу"""
         """
         :param query: запрос к БД

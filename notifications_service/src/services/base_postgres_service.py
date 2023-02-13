@@ -1,10 +1,10 @@
 from sqlalchemy.future import select
 
-from db.postgres import async_session
+from db.postgres import Base, async_session
 
 
 class BaseService:
-    _model = None
+    _model: Base = None
 
     def __init__(self):
         self._session = async_session
