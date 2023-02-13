@@ -24,15 +24,15 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r ugc_service/requirements.txt
+        pip install -r notifications_service/requirements.txt
 
     - name: Run sanity check
       run: |
-        python3 -m pytest ugc_service/tests/functional/src/ 
+        python3 -m pytest notifications_service/tests/functional/src/ 
 
     - name: Run mypy
       run: |
-        mypy --ignore-missing-imports ugc_service/src
+        mypy --ignore-missing-imports notifications_service/src
 
     - name: Send notification
       if: failure()
