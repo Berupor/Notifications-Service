@@ -41,9 +41,6 @@ class ClickhouseSettings(BaseSettings):
     user: str
     password: str
 
-class ServiceUrl(BaseSettings):
-    host: str
-    port: int
 
 class Settings(BaseSettings):
     token_algo: str
@@ -53,7 +50,6 @@ class Settings(BaseSettings):
     postgres: PostgresSettings
     email_server: EmailServer
     clickhouse: ClickhouseSettings
-    service_url: ServiceUrl
 
     class Config:
         #  For local development outside of docker
