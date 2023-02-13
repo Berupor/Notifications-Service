@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import User, Characteristic, UserCharacteristic, Notification, Template, Schedule, UserNotification
+from .models import (
+    User,
+    Characteristic,
+    UserCharacteristic,
+    Notification,
+    Template,
+    Schedule,
+    UserNotification,
+)
 
 
 class UserCharacteristicInline(admin.TabularInline):
@@ -17,36 +25,40 @@ class UserNotificationInline(admin.TabularInline):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     inlines = (UserCharacteristicInline, UserNotificationInline)
-    list_display = ('name', 'email', "id")
-    search_fields = ('name', 'email')
-    ordering = ('name',)
-    list_filter = ('characteristic__name',)
+    list_display = ("name", "email", "id")
+    search_fields = ("name", "email")
+    ordering = ("name",)
+    list_filter = ("characteristic__name",)
 
 
 @admin.register(Characteristic)
 class CharacteristicAdmin(admin.ModelAdmin):
-    search_fields = ("characteristic", )
-    list_display = ('name', )
-    ordering = ('name',)
+    search_fields = ("characteristic",)
+    list_display = ("name",)
+    ordering = ("name",)
 
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'schedule', 'priority',)
-    search_fields = ('name', 'schedule__name')
-    ordering = ('priority',)
+    list_display = (
+        "name",
+        "schedule",
+        "priority",
+    )
+    search_fields = ("name", "schedule__name")
+    ordering = ("priority",)
     list_filter = ("schedule", "priority")
 
 
 @admin.register(Template)
 class TemplateAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
-    ordering = ('name',)
+    list_display = ("name",)
+    search_fields = ("name",)
+    ordering = ("name",)
 
 
 @admin.register(Schedule)
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'crontab', 'name')
-    search_fields = ('name',)
-    ordering = ('created',)
+    list_display = ("id", "crontab", "name")
+    search_fields = ("name",)
+    ordering = ("created",)
