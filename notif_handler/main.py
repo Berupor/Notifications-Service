@@ -6,14 +6,14 @@ from datetime import datetime
 
 from clickhouse_driver import Client
 
-from failed_notif_handler.utils.states import JsonFileStorage, State
+from notif_handler.utils.states import JsonFileStorage, State
 from core.config import settings
 
 logging.basicConfig(level=logging.INFO)
 
 # client = Client(host=settings.clickhouse.host)
 client = Client(host="localhost")
-service_email = f"http://{settings.service_url.host}:{settings.service_url.port}/api/v1/notification/email"
+service_email = f"http://{settings.fastapi.host}:{settings.fastapi.port}/api/v1/notification/email"
 
 
 def data_from_ch(updated):
@@ -40,6 +40,8 @@ def message_extractor(updated):
     messages = data_transform(result)
     return messages
 
+def message_to_notification(message):
+    pass
 
 def message_sender(message):
     # user_id = message.user_id
