@@ -39,17 +39,15 @@ jobs:
       env:
         TELEGRAM_API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
         CHAT_ID: ${{ secrets.QA_CHAT_ID }}
-        MESSAGE: ${{"failed!"}}
       run: |
         pip install python-telegram-bot
-        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} "Code Sanity Check and Mypy failed!"
+        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} "CI/CD pipeline failed for commit ${GITHUB_SHA}! Step '${GITHUB_ACTION}' failed."
 
     - name: Send Telegram message on success
       if: success()
       env:
         TELEGRAM_API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
         CHAT_ID: ${{ secrets.QA_CHAT_ID }}
-        MESSAGE: ${{"passed!"}}
       run: |
         pip install python-telegram-bot
-        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} "Code Sanity Check and Mypy passed successfully!"
+        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} "CI/CD pipeline for commit ${GITHUB_SHA} finished successfully!"
