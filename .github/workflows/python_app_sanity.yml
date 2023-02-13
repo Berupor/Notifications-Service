@@ -2,9 +2,9 @@ name: Code Sanity Check and Mypy
 
 on:
   push:
-    branches: [ "development", "main" ]
+    branches: [ "dev-zelenov-ci", "main" ]
   pull_request:
-    branches: [ "development", "main" ]
+    branches: [ "dev-zelenov-ci", "main" ]
 
 jobs:
   build:
