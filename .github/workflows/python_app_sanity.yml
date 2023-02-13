@@ -2,16 +2,16 @@ name: Code Sanity Check and Mypy
 
 on:
   push:
-    branches: [ "dev-zelenov-ci", "main" ]
+    branches: [ "development", "main" ]
   pull_request:
-    branches: [ "dev-zelenov-ci", "main" ]
+    branches: [ "development", "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.8, 3.9 ]
+        python-version: [ 3.7, 3.8, 3.9 ]
 
     steps:
     - name: Checkout code
@@ -32,7 +32,16 @@ jobs:
 
     - name: Run mypy
       run: |
-        mypy --ignore-missing-imports notifications_service/src 
+        mypy --ignore-missing-imports ugc_service/src
+
+    - name: Send notification
+      if: failure()
+      env:
+        API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
+        CHAT_ID: ${{ secrets.QA_CHAT_ID }}
+      run: |
+        pip install python-telegram-bot
+        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} "Code Sanity Check and Mypy failed!"
 
     - name: Send Telegram message on success
       if: success()
