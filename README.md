@@ -66,6 +66,7 @@ core notification system, as well as developing and maintaining tests to ensure 
 
 <details>
 <summary>Mburdonos</summary>
+
 ---
 Mburdonos is an experienced developer with a passion for automation and optimization. He takes care of the crontab schedule for automated notification sending, the worker for handling notifications in the background, and integrating the system with ClickHouse for efficient data storage and analysis.
 </details>
