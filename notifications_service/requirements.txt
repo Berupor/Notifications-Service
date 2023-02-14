@@ -15,3 +15,5 @@ python-telegram-bot==20.0
 flake8-html==0.4.3
 backoff==2.2.1
 asyncio==3.4.3
+pytest-html==3.2.0
+flake8-html==0.4.3

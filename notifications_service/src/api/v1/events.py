@@ -1,4 +1,6 @@
 from http import HTTPStatus
+import backoff
+import psycopg2
 
 from fastapi import APIRouter, Depends
 
@@ -23,6 +25,12 @@ queue_priority = {1: "low", 2: "medium", 3: "high"}
     response_description="Статус обработки данных.",
 )
 @exception_handler
+@backoff.on_exception(
+    backoff.expo,
+    (psycopg2.OperationalError,),
+    max_time=1000,
+    max_tries=10,
+)
 async def email_notification(
     event: RequestEventModel,
     user_id: str,
