@@ -11,14 +11,16 @@ async def send_telegram_message(api_token, chat_id, message):
 
 api_token = os.environ["TELEGRAM_API_TOKEN"]
 chat_id = os.environ["CHAT_ID"]
-# project_name = "Notifications service"
-repo = git.Repo(search_parent_directories=True)
-sha = repo.head.object.hexsha
+tests = os.environ["TESTS"]
 
-tests_successful = os.environ["TESTS"]
-if tests_successful == 'Success':
-    message = f'{repo}: pipeline for {sha} passed successfully'
+repo = git.Repo(search_parent_directories=True)
+commit_sha = repo.head.object.hexsha
+repo_name = os.path.basename(repo.working_dir)
+
+if tests == 'Success':
+    message = f'{repo_name}: pipeline for ```{commit_sha}``` passed successfully'
 else:
-    message = f'{repo}: pipeline for {sha} failed'
+    failed_step = os.environ.get('FAILED_STEP_NAME', 'unknown')
+    message = f'{repo_name}: pipeline for ```{commit_sha}``` failed in step: {failed_step}'
 
 asyncio.run(send_telegram_message(api_token, chat_id, message))
