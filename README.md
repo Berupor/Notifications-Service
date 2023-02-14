@@ -3,6 +3,23 @@
 The Notification Service is a versatile system for managing and sending notifications to users. Simplify your
 notification process and improve your user engagement with the Notification Service.
 
+---
+<details>
+<summary>Architecture scheme</summary>
+
+![img](arcitecture/Notification_Service.png)
+
+
+</details>
+<details>
+<summary>Database scheme</summary>
+
+![img](arcitecture/Database.png)
+
+</details>
+
+---
+
 ## Features:
 
 - Django Admin panel for easy management of notifications
@@ -36,7 +53,8 @@ For more detailed usage and API documentation, please refer to
 
 ## Team
 
-Notification Service is the result of a talented and dedicated team of developers who work together to deliver a high-quality service. Each member brings unique skills and expertise to the project, contributing to its success.
+Notification Service is the result of a talented and dedicated team of developers who work together to deliver a
+high-quality service. Each member brings unique skills and expertise to the project, contributing to its success.
 
 <details>
 <summary>Berupor</summary>
@@ -60,3 +78,4 @@ Nikita is a data specialist with a keen eye for detail. He takes care of the uns
 failed notifications are properly managed and addressed. Additionally, he is responsible for integrating the system with
 PostgreSQL for seamless data management and retrieval.
 </details>
+
