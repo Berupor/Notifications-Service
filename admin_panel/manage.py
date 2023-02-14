@@ -2,8 +2,16 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import psycopg2
+import backoff
 
 
+@backoff.on_exception(
+    backoff.expo,
+    (psycopg2.OperationalError,),
+    max_time=1000,
+    max_tries=10,
+)
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
