@@ -8,7 +8,7 @@ async def send_telegram_message(api_token, chat_id, message):
     await bot.send_message(chat_id=chat_id, text=message)
 
 
-api_token = os.environ["API_TOKEN"]
+api_token = os.environ["TELEGRAM_API_TOKEN"]
 chat_id = os.environ["CHAT_ID"]
 message = os.environ["MESSAGE"]
 

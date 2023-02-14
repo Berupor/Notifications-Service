@@ -42,7 +42,7 @@ jobs:
         MESSAGE: ${{ secrets.FAIL }}
       run: |
         pip install python-telegram-bot
-        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} ${MESSAGE} "Code Sanity Check and Mypy failed!"
+        python .github/tools/send_message.py ${TELEGRAM_API_TOKEN} ${CHAT_ID} ${MESSAGE} "Code Sanity Check and Mypy failed!"
 
     - name: Send Telegram message on success
       if: success()
@@ -52,4 +52,4 @@ jobs:
         MESSAGE: ${{ secrets.SUCCESS }}
       run: |
         pip install python-telegram-bot
-        python .github/tools/send_message.py ${API_TOKEN} ${CHAT_ID} ${MESSAGE} "Code Sanity Check and Mypy passed successfully!"
+        python .github/tools/send_message.py ${TELEGRAM_API_TOKEN} ${CHAT_ID} ${MESSAGE} "Code Sanity Check and Mypy passed successfully!"
