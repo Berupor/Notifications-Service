@@ -17,6 +17,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
+
     rabbitmq = get_rabbitmq()
     await rabbitmq.connect()
 

@@ -49,5 +49,7 @@ class Clickhouse:
             f"INSERT INTO {table}(status, message) VALUES", data
         )
 
+
+
     async def validate_format(self, status: str, message: dict) -> Dict:
         return {"status": status, "message": dumps(message)}
