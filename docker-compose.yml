@@ -24,9 +24,6 @@ services:
     expose:
       - "5672"
       - "15672"
-#    ports:
-#      - "5672:5672"
-#      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ__USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ__PASSWORD}
@@ -44,8 +41,8 @@ services:
       - POSTGRES_DB=${POSTGRES__DBNAME}
     expose:
       - "5432"
-#    ports:
-#      - "5432:5432"
+   ports:
+     - "5432:5432"
 
   admin-panel:
     container_name: admin-panel
@@ -69,8 +66,6 @@ services:
     restart: always
     expose:
       - "8001"
-#    ports:
-#      - "8001:8001"
     depends_on:
       - rabbitmq
 
@@ -90,10 +85,6 @@ services:
     expose:
       - "8123"
       - "9000"
-    ports:
-      - "8123:8123"
-      - "9000:9000"
-
   worker:
     build:
       context: ./worker
