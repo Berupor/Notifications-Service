@@ -35,7 +35,20 @@ notification process and improve your user engagement with the Notification Serv
 ## Project initialization
 
 1. Create an .env file and fill it with values from `env.example`
-2. Run Docker `docker-compose up -d --build`
+2. Run django container
+```console
+ docker-compose up -d admin-panel --build
+```
+### In the container
+2. Run migrations
+```console
+python manage.py createsuperuser
+```
+### Outsade the container
+4. Run Docker compose
+```console
+docker-compose up -d --build
+```
 
 ## API
 
