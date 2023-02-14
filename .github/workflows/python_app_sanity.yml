@@ -40,11 +40,10 @@ jobs:
           TELEGRAM_API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
           CHAT_ID: ${{ secrets.QA_CHAT_ID }}
           TESTS: ${{ job.status }}
-          FAILED_STEP_NAME: ${{ job.steps[3].name }}
         run: |
           pip install python-telegram-bot
           pip install gitpython
-          python .github/tools/send_message.py ${TELEGRAM_API_TOKEN} ${CHAT_ID} ${TESTS} ${FAILED_STEP_NAME} "Code Sanity Check and Mypy failed!"
+          python .github/tools/send_message.py ${TELEGRAM_API_TOKEN} ${CHAT_ID} ${TESTS} "Code Sanity Check and Mypy failed!"
 
       - name: Send notification
         if: success()

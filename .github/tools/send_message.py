@@ -18,9 +18,8 @@ commit_sha = repo.head.object.hexsha
 repo_name = os.path.basename(repo.working_dir)
 
 if tests == 'Success':
-    message = f'{repo_name}: pipeline for ```{commit_sha}``` passed successfully'
+    message = f'{repo_name}: pipeline for ```{commit_sha}``` passed successfully.'
 else:
-    failed_step = os.environ.get('FAILED_STEP_NAME', 'unknown')
-    message = f'{repo_name}: pipeline for ```{commit_sha}``` failed in step: {failed_step}'
+    message = f'{repo_name}: pipeline for ```{commit_sha}``` failed.'
 
 asyncio.run(send_telegram_message(api_token, chat_id, message))
