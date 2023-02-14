@@ -50,5 +50,6 @@ class Clickhouse:
         )
 
 
+
     async def validate_format(self, status: str, message: dict) -> Dict:
         return {"status": status, "message": dumps(message)}
