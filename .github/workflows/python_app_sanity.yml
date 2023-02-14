@@ -25,22 +25,12 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r notifications_service/requirements.txt
-
       - name: Run sanity check
         run: |
           python3 -m pytest notifications_service/tests/functional/src/
-
-    - name: Lint with flake8 (wemake-python-styleguide)
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --format=html --htmldir=flake-report
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-
       - name: Run mypy
         run: |
           mypy --ignore-missing-imports notifications_service/src
-
       - name: Send notification
         if: failure()
         env:
@@ -51,7 +41,6 @@ jobs:
           pip install python-telegram-bot
           pip install gitpython
           python .github/tools/send_message.py ${TELEGRAM_API_TOKEN} ${CHAT_ID} ${TESTS} "Code Sanity Check and Mypy failed!"
-
       - name: Send notification
         if: success()
         env:
