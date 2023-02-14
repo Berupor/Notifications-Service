@@ -92,3 +92,16 @@ services:
     ports:
       - "8123:8123"
       - "9000:9000"
+
+  notifications_handler:
+    build:
+      context: ./notifications_handler
+      dockerfile: DockerFile
+    container_name: notifications_handler
+    depends_on:
+      - clickhouse
+      - notifications_service
+    ports:
+      - "8005:8005"
+    env_file:
+      - ./.env
