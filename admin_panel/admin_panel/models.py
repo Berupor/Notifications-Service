@@ -95,6 +95,7 @@ class UserCharacteristic(models.Model):
 class UserNotification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
+    enabled = models.BooleanField(default=True)
 
     class Meta:
         db_table = "user_notification"
