@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List, Optional, Tuple
 
-import croniter
+import croniter  # type: ignore
 from models.notifications import Notification
 from models.schedule import Schedule
 

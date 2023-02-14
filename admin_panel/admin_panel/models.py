@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-import requests
+import requests  # type: ignore
 
 
 class TimeStampedMixin(models.Model):
@@ -21,7 +21,9 @@ class UUIDMixin(models.Model):
 class User(UUIDMixin):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    characteristic = models.ManyToManyField("Characteristic", through="UserCharacteristic")
+    characteristic = models.ManyToManyField(
+        "Characteristic", through="UserCharacteristic"
+    )
     notification = models.ManyToManyField("Notification", through="UserNotification")
 
     class Meta:
@@ -45,7 +47,7 @@ class Characteristic(models.Model):
 class Notification(TimeStampedMixin):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE)
+    schedule = models.ForeignKey("Schedule", on_delete=models.CASCADE)
     priority = models.PositiveSmallIntegerField()
     template = models.ForeignKey("Template", on_delete=models.CASCADE)
     data = models.JSONField()
@@ -87,7 +89,7 @@ class UserCharacteristic(models.Model):
 
     class Meta:
         db_table = "user_characteristic"
-        unique_together = ('user', 'characteristic')
+        unique_together = ("user", "characteristic")
 
 
 class UserNotification(models.Model):
@@ -96,15 +98,15 @@ class UserNotification(models.Model):
 
     class Meta:
         db_table = "user_notification"
-        unique_together = ('user', 'notification')
+        unique_together = ("user", "notification")
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if self.notification.schedule.name == "Now":
             payload = {
-                'notification_name': self.notification.name,
-                'priority': self.notification.priority,
-                'data': self.notification.data
+                "notification_name": self.notification.name,
+                "priority": self.notification.priority,
+                "data": self.notification.data,
             }
 
             url = f"http://localhost:8001/api/v1/notification/email/{self.user.id}"
@@ -112,6 +114,6 @@ class UserNotification(models.Model):
 
             # Todo: Добавить логи
             if response.status_code == 200:
-                print('Notification sent successfully')
+                print("Notification sent successfully")
             else:
-                print('Failed to send notification')
+                print("Failed to send notification")
