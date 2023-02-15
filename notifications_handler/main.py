@@ -13,14 +13,17 @@ from models.notification import Notification
 logging.basicConfig(level=logging.INFO)
 
 client = Client(host=settings.clickhouse.host)
-service_email = f"http://{settings.fastapi.host}:{settings.fastapi.port}/api/v1/notification/email"
+service_email = (
+    f"http://{settings.fastapi.host}:{settings.fastapi.port}/api/v1/notification/email"
+)
 
 
 def data_from_ch(updated):
     result = client.execute(
         f"""SELECT * FROM default.notification WHERE status LIKE '%error%' AND (create >= toDateTime('{updated}')) 
         ORDER BY create ASC; """,
-        with_column_types=True)
+        with_column_types=True,
+    )
     return result
 
 
@@ -40,14 +43,16 @@ def messages_extractor(updated: str):
     messages = data_transform(result)
     return messages
 
+
 def message_to_notification(message: dict):
     notification = Notification()
     notification.user_id = message["user"]["user_id"]
     notification.created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     notification.notification_name = message["notification_name"]
-    notification.priority = 3 #the higthest priority
+    notification.priority = 3  # the higthest priority
     notification.data = message["data"]
     return notification
+
 
 def notification_sender(notification: Notification):
     user_id = random.randint
@@ -60,19 +65,23 @@ def notification_sender(notification: Notification):
 if __name__ == "__main__":
     while True:
         sleep(10)
-        state_storage = JsonFileStorage(file_path='json_state')
+        state_storage = JsonFileStorage(file_path="json_state")
         state = State(storage=state_storage)
-        updated = state.get_state(key='updated')
+        updated = state.get_state(key="updated")
         messages = messages_extractor(updated=updated)
         if messages:
             for message in messages:
                 try:
-                    print(message)
                     notification = message_to_notification(message)
                     status_code = notification_sender(notification)
-                    state.set_state(key='updated', value=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                    state.set_state(
+                        key="updated",
+                        value=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+                    )
                     logging.info(status_code)
                 except:
-                    logging.warning("the message cannot be proceed by server properly or server is offline")
+                    logging.warning(
+                        "the message cannot be proceed by server properly or server is offline"
+                    )
                     break
         logging.info(f"last update {state.get_state(key='updated')}")
