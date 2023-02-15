@@ -1,5 +1,6 @@
 # Notification Service
 https://github.com/Berupor/Notifications-Service
+
 The Notification Service is a versatile system for managing and sending notifications to users. Simplify your
 notification process and improve your user engagement with the Notification Service.
 
