@@ -24,8 +24,6 @@ services:
     expose:
       - ${RABBITMQ__PORT}
       - "15672"
-    ports:
-      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ__USERNAME}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ__PASSWORD}
@@ -43,8 +41,6 @@ services:
       - POSTGRES_DB=${POSTGRES__DBNAME}
     expose:
       - ${POSTGRES__PORT}
-    ports:
-      - "5432:5432"
 
   admin-panel:
     container_name: admin-panel
@@ -59,8 +55,6 @@ services:
       always
     expose:
       - ${DJANGO__PORT}
-    ports:
-      - "8000:8000"
 
   notifications_service:
     build:

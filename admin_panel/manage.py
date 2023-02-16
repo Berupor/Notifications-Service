@@ -2,8 +2,9 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-import psycopg2
+
 import backoff
+import psycopg2
 
 
 @backoff.on_exception(

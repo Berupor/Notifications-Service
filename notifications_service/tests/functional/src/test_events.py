@@ -2,8 +2,11 @@ from http import HTTPStatus
 
 from api.v1.events import router
 from fastapi.testclient import TestClient
-from functional.src.utils.mocks import (MockNotificationsService,
-                                        MockRabbitMQBroker, MockUserService)
+from functional.src.utils.mocks import (
+    MockNotificationsService,
+    MockRabbitMQBroker,
+    MockUserService,
+)
 from message_broker.rabbitmq.rabbitmq_broker import RabbitMQBroker
 from pytest import MonkeyPatch
 from services.notifications_service import NotificationsService
