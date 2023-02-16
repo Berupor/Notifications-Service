@@ -1,4 +1,3 @@
-import backoff
 from typing import AsyncGenerator
 
 
@@ -12,9 +11,7 @@ class Extract:
         :param query: запрос на получения данных
         :return: результат выполнения
         """
-        curs = self.pg_conn.cursor()
-        curs.execute(query)
-        return curs
+        return await self.pg_conn.execute(query)
 
     async def read_db(self, query: str, batch_size: int = 100) -> AsyncGenerator:
         """Функция выполнения запросов к хранилищу"""

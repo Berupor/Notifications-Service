@@ -95,7 +95,6 @@ services:
       - "8123"
       - ${CLICKHOUSE__PORT}
 
-
   worker:
     build:
       context: ./worker
