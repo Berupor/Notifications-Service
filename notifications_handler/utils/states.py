@@ -20,12 +20,12 @@ class JsonFileStorage(BaseStorage):
         self.file_path = file_path
 
     def save_state(self, state: dict):
-        with open(self.file_path, 'w') as f:
+        with open(self.file_path, "w") as f:
             json.dump(state, f)
 
     def retrieve_state(self):
         try:
-            with open(self.file_path, 'r') as f:
+            with open(self.file_path, "r") as f:
                 r = json.load(f)
         except FileNotFoundError:
             r = {}
