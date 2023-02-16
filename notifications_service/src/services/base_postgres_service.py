@@ -14,7 +14,3 @@ class BaseService:
             query = select(self._model).filter_by(**kwargs)
             result = await session.execute(query)
             return result.scalar()
-
-    async def find(self, **kwargs):
-        async with self._session() as session:
-            return session.query(self._model).filter_by(**kwargs).all()

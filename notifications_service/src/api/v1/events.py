@@ -32,11 +32,11 @@ queue_priority = {1: "low", 2: "medium", 3: "high"}
     max_tries=10,
 )
 async def email_notification(
-        event: RequestEventModel,
-        user_id: str,
-        user_service: UserService = Depends(get_user_service),
-        notifications_service: NotificationsService = Depends(get_notification_service),
-        message_service: RabbitMQBroker = Depends(get_rabbitmq),
+    event: RequestEventModel,
+    user_id: str,
+    user_service: UserService = Depends(get_user_service),
+    notifications_service: NotificationsService = Depends(get_notification_service),
+    message_service: RabbitMQBroker = Depends(get_rabbitmq),
 ) -> int:
     """Processing received event data.
     Args:
