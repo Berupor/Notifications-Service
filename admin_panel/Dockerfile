@@ -11,6 +11,8 @@ ENV DJANGO_SETTINGS_MODULE 'config.settings'
 
 COPY requirements.txt requirements.txt
 
+COPY ./entrypoint.sh entrypoint.sh
+
 RUN  mkdir -p /opt/app/static/ \
      && mkdir -p /opt/app/media/ \
      && pip install --upgrade pip \
@@ -22,4 +24,4 @@ RUN chmod +x ./entrypoint.sh
 
 EXPOSE 8000
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
