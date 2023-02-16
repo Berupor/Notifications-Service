@@ -1,6 +1,7 @@
 import uuid
-from django.db import models
+
 import requests  # type: ignore
+from django.db import models
 
 
 class TimeStampedMixin(models.Model):
@@ -96,25 +97,11 @@ class UserNotification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     enabled = models.BooleanField(default=True)
+    sent = models.BooleanField(default=False)
 
     class Meta:
         db_table = "user_notification"
         unique_together = ("user", "notification")
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.notification.schedule.name == "Now":
-            payload = {
-                "notification_name": self.notification.name,
-                "priority": self.notification.priority,
-                "data": self.notification.data,
-            }
-
-            url = f"http://localhost:8001/api/v1/notification/email/{self.user.id}"
-            response = requests.post(url, json=payload)
-
-            # Todo: Добавить логи
-            if response.status_code == 200:
-                print("Notification sent successfully")
-            else:
-                print("Failed to send notification")
+    def __str__(self):
+        return f"{self.user.name} – {self.notification.name}"

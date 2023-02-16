@@ -12,6 +12,13 @@ class DjangoSettings(BaseSettings):
     secret_key: str
 
 
+class FastapiSettings(BaseSettings):
+    project_name: str
+    secret_key: str
+    host: str
+    port: int
+
+
 class PostgresSettings(BaseSettings):
     user: str
     dbname: str
@@ -23,6 +30,7 @@ class PostgresSettings(BaseSettings):
 class Settings(BaseSettings):
     django: DjangoSettings
     postgres: PostgresSettings
+    fastapi: FastapiSettings
 
     class Config:
         #  For local development outside of docker
