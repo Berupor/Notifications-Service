@@ -11,6 +11,8 @@ ENV_DIR = os.path.join(BASE_DIR, "..")
 class DjangoSettings(BaseSettings):
     secret_key: str
     port: int
+    debug: bool
+    hosts: str
 
 
 class FastapiSettings(BaseSettings):
