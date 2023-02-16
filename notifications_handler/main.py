@@ -68,6 +68,12 @@ if __name__ == "__main__":
         state_storage = JsonFileStorage(file_path="json_state")
         state = State(storage=state_storage)
         updated = state.get_state(key="updated")
+        if not updated:
+            state.set_state(
+                key="updated",
+                value=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
+            )
+            updated = state.get_state(key="updated")
         messages = messages_extractor(updated=updated)
         if messages:
             for message in messages:
