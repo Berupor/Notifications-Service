@@ -10,7 +10,7 @@ db_uri = (
     f"{settings.postgres.host}:{settings.postgres.port}/"
     f"{settings.postgres.dbname}"
 )
-db = create_async_engine(db_uri, convert_unicode=True)
+db = create_async_engine(db_uri)
 async_session = sessionmaker(db, expire_on_commit=False, class_=AsyncSession)
 
 db_session = scoped_session(async_session)
