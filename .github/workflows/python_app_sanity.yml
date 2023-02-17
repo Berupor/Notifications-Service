@@ -2,9 +2,9 @@ name: Code Sanity Check and Mypy
 
 on:
   push:
-    branches: [main, dev-zelenov-test]
+    branches: [ main, dev-zelenov-test ]
   pull_request:
-    branches: [main, dev-zelenov-test]
+    branches: [ main, dev-zelenov-test ]
 
 jobs:
   build:
@@ -13,7 +13,7 @@ jobs:
       SQLALCHEMY_SILENCE_UBER_WARNING: 1
     strategy:
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [ 3.8, 3.9 ]
 
     steps:
       - name: Checkout code
@@ -63,15 +63,11 @@ jobs:
           to: ${{ secrets.QA_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_API_TOKEN }}
           message: |
-            :white_check_mark: *CI passed* :white_check_mark:
+            \U+2705 *CI passed* :white_check_mark:
             
-            Commit: ${{ github.sha }}
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
             Repository: ${{ github.repository }}
-            
-            The following job passed: ${{ job.status }}
-            Job name: ${{ job.job_name }}
-            Job ID: ${{ job.job_id }}
-            Job run number: ${{ job.run_number }}
             
             See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           
