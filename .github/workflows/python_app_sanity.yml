@@ -63,7 +63,7 @@ jobs:
           to: ${{ secrets.QA_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_API_TOKEN }}
           message: |
-            \U+2705 *CI passed* :white_check_mark:
+            \U+2705 *CI passed* '\U0001F609'
             
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
