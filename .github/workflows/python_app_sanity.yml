@@ -44,10 +44,17 @@ jobs:
           to: ${{ secrets.QA_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_API_TOKEN }}
           message: |
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
+            :x: *CI failed* :x:
+            
+            Commit: ${{ github.sha }}
             Repository: ${{ github.repository }}
-            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+            
+            The following job failed: ${{ job.status }}
+            Job name: ${{ job.job_name }}
+            Job ID: ${{ job.job_id }}
+            Job run number: ${{ job.run_number }}
+            
+            See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
       - name: send success telegram message
         if: ${{ success() }}
@@ -56,7 +63,15 @@ jobs:
           to: ${{ secrets.QA_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_API_TOKEN }}
           message: |
-            ${{ github.actor }} created commit:
-            Commit message: ${{ github.event.commits[0].message }}
+            :white_check_mark: *CI passed* :white_check_mark:
+            
+            Commit: ${{ github.sha }}
             Repository: ${{ github.repository }}
-            See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+            
+            The following job passed: ${{ job.status }}
+            Job name: ${{ job.job_name }}
+            Job ID: ${{ job.job_id }}
+            Job run number: ${{ job.run_number }}
+            
+            See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          
