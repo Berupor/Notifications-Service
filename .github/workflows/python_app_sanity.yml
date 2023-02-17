@@ -2,13 +2,15 @@ name: Code Sanity Check and Mypy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SQLALCHEMY_SILENCE_UBER_WARNING: 1
     strategy:
       matrix:
         python-version: [ 3.8, 3.9 ]
@@ -24,30 +26,44 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r notifications_service/requirements.txt
+          pip install -r notifications_service/dev.requirements.txt
+
       - name: Run sanity check
         run: |
-          python3 -m pytest notifications_service/tests/functional/src/
+          python -m pytest notifications_service/tests/functional/src/
+
       - name: Run mypy
         run: |
-          mypy --ignore-missing-imports notifications_service/src
-      - name: Send notification
-        if: failure()
-        env:
-          TELEGRAM_API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
-          CHAT_ID: ${{ secrets.QA_CHAT_ID }}
-          TESTS: ${{ job.status }}
-        run: |
-          pip install python-telegram-bot
-          pip install gitpython
-          python .github/tools/send_message.py ${TELEGRAM_API_TOKEN} ${CHAT_ID} ${TESTS} "Code Sanity Check and Mypy failed!"
-      - name: Send notification
-        if: success()
-        env:
-          TELEGRAM_API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
-          CHAT_ID: ${{ secrets.QA_CHAT_ID }}
-          TESTS: ${{ job.status }}
-        run: |
-          pip install python-telegram-bot
-          pip install gitpython
-          python .github/tools/send_message.py ${TELEGRAM_API_TOKEN} ${CHAT_ID} ${TESTS} "Code Sanity Check and Mypy failed!"
+          pip install mypy
+          mypy --ignore-missing-imports notifications_service/src/
+
+      - name: send failure telegram message
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.QA_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_API_TOKEN }}
+          message: |
+            *CI Failed* 
+            
+            ${{ github.actor }} created commit
+            Commit message: ${{ github.event.commits[0].message }}
+            Repository: ${{ github.repository }}
+            
+            See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      - name: send success telegram message
+        if: ${{ success() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.QA_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_API_TOKEN }}
+          message: |
+            *CI Passed* 
+            
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+            Repository: ${{ github.repository }}
+            
+            See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          

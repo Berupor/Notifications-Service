@@ -1,4 +1,3 @@
-
 version: '3'
 
 services:
@@ -23,7 +22,7 @@ services:
     restart:
       always
     expose:
-      - "5672"
+      - ${RABBITMQ__PORT}
       - "15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ__USERNAME}
@@ -31,42 +30,43 @@ services:
 
   postgres:
     container_name: postgres
-    hostname: postgres
-    image: postgres:15-alpine
-    restart: always
     env_file:
       - .env
+    hostname: ${POSTGRES__HOST}
+    image: postgres:15-alpine
+    restart: always
     environment:
       - POSTGRES_USER=${POSTGRES__USER}
       - POSTGRES_PASSWORD=${POSTGRES__PASSWORD}
       - POSTGRES_DB=${POSTGRES__DBNAME}
     expose:
-      - "5432"
-   ports:
-     - "5432:5432"
+      - ${POSTGRES__PORT}
 
   admin-panel:
     container_name: admin-panel
     build: admin_panel
-    restart:
-      always
-    ports:
-      - "8000:8000"
     env_file:
       - .env
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+    restart:
+      always
+    expose:
+      - ${DJANGO__PORT}
 
   notifications_service:
     build:
       context: ./notifications_service
       dockerfile: DockerFile
-    image: notifications_service:latest
     container_name: notifications_service
     env_file:
       - .env
     hostname: ${FASTAPI__HOST}
     restart: always
     expose:
-      - "8001"
+      - ${FASTAPI__PORT}
     depends_on:
       - rabbitmq
 
@@ -81,11 +81,15 @@ services:
 
   clickhouse:
     image: yandex/clickhouse-server:21.7.4
+    env_file:
+      - .env
     container_name: clickhouse
-    hostname: clickhouse
+    hostname: ${CLICKHOUSE__HOST}
     expose:
       - "8123"
-      - "9000"
+      - ${CLICKHOUSE__PORT}
+
+
   worker:
     build:
       context: ./worker
@@ -106,7 +110,7 @@ services:
     depends_on:
       - clickhouse
       - notifications_service
-    ports:
-      - "8005:8005"
+    expose:
+      - "8005"
     env_file:
       - ./.env

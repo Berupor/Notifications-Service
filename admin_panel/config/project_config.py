@@ -10,6 +10,16 @@ ENV_DIR = os.path.join(BASE_DIR, "..")
 
 class DjangoSettings(BaseSettings):
     secret_key: str
+    port: int
+    debug: bool
+    hosts: str
+
+
+class FastapiSettings(BaseSettings):
+    project_name: str
+    secret_key: str
+    host: str
+    port: int
 
 
 class PostgresSettings(BaseSettings):
@@ -23,6 +33,7 @@ class PostgresSettings(BaseSettings):
 class Settings(BaseSettings):
     django: DjangoSettings
     postgres: PostgresSettings
+    fastapi: FastapiSettings
 
     class Config:
         #  For local development outside of docker

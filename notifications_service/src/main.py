@@ -23,9 +23,7 @@ app = FastAPI(
 @app.on_event("startup")
 @backoff.on_exception(
     backoff.expo,
-    (
-            ConnectionError
-    ),
+    (ConnectionError),
     max_time=1000,
     max_tries=10,
 )
