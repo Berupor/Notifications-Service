@@ -44,15 +44,11 @@ jobs:
           to: ${{ secrets.QA_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_API_TOKEN }}
           message: |
-            :x: *CI failed* :x:
+            *CI Failed* 
             
-            Commit: ${{ github.sha }}
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
             Repository: ${{ github.repository }}
-            
-            The following job failed: ${{ job.status }}
-            Job name: ${{ job.job_name }}
-            Job ID: ${{ job.job_id }}
-            Job run number: ${{ job.run_number }}
             
             See details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -63,7 +59,7 @@ jobs:
           to: ${{ secrets.QA_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_API_TOKEN }}
           message: |
-            \U+2705 *CI passed* '\U0001F609'
+            *CI Passed* 
             
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}

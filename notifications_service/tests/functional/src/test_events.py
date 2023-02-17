@@ -24,7 +24,6 @@ def test_email_notification(monkeypatch: MonkeyPatch):
 
     data = {
         "notification_name": "Notification",
-        "priority": 3,
         "data": {
             "movie_name": "The Forest",
             "actor_name": "Pipa Lipa",
