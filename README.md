@@ -8,14 +8,14 @@ notification process and improve your user engagement with the Notification Serv
 <details>
 <summary>Architecture scheme</summary>
 
-![img](arcitecture/Notification_Service.png)
+![img](architecture/Notification_Service.png)
 
 
 </details>
 <details>
 <summary>Database scheme</summary>
 
-![img](arcitecture/Database.png)
+![img](architecture/Database.png)
 
 </details>
 
